@@ -22,4 +22,6 @@ $$
 
 In this way, the _uncertainty_ of $Y$ can be quantified given $x$. This allows for uncertainty sampling.
 
+![Fitted mean and uncertainty estimates](model.png)
+
 Once a model is fitted with some data $x_1, \dots, x_N$, the next points to be labelled are selected by estimating $\sigma(x_i)$ for unlabeled data $x_{N+1}, \dots x_{N+M}$. K data points in $x_{N+1}, \dots x_{N+M}$ with the highest estimated uncertainty are selected, they are annotated, and the model is refitted with a combination of the old and the new datasets. This is iteratively repeated until the desired accuracy is reached.

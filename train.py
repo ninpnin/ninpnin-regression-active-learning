@@ -105,6 +105,7 @@ def main(args):
     print(df2)
     sns.regplot(data=df2, x='x', y='y', ax=ax, fit_reg=False)
     plt.show()
+    plt.savefig('model.png')
 
 if __name__ == '__main__':
     import argparse                                                                                                   
