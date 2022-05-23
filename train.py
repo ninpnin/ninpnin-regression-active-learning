@@ -33,8 +33,8 @@ def custom_loss(y_true, y_pred):
 def define_model():
     model = Sequential(name="Model-with-One-Input")
     model.add(Input(shape=(1,), name='Input-Layer'))
-    model.add(Dense(5, activation='relu', name='h1'))
-    model.add(Dense(5, activation='relu', name='h2'))
+    model.add(Dense(args.hidden, activation='relu', name='h1'))
+    model.add(Dense(args.hidden, activation='relu', name='h2'))
     model.add(Dense(2, activation='linear', name='Output-Layer'))
 
     model.compile(optimizer='adam', loss=custom_loss, run_eagerly=True)
@@ -56,7 +56,7 @@ def main(args):
     dataset = tf.data.Dataset.zip((x_ds, y_ds))
 
     dataset = dataset.shuffle(1000)
-    dataset = dataset.take(50)
+    #dataset = dataset.take(50)
     ds_len = len(dataset)
     train_ds_len = int(ds_len * 0.7)
     valid_ds_len = int(ds_len * 0.15)
@@ -72,9 +72,13 @@ def main(args):
     print(valid_dataset)
     #x_train, x_test, y_train, y_test = 
     #print(next(dataset))
-    model.fit(train_dataset, epochs=args.epochs, validation_data=valid_dataset)
+    if args.early_stopping_patience is not None:
+        es_callback = tf.keras.callbacks.EarlyStopping(patience=args.early_stopping_patience)
+        model.fit(train_dataset, epochs=args.epochs, validation_data=valid_dataset, callbacks=[es_callback])
+    else:
+        model.fit(train_dataset, epochs=args.epochs, validation_data=valid_dataset)
 
-    x = tf.range(-22.0, 22.0) / 11.0
+    x = tf.range(-22.0, 22.0) / 11.0 * 2
     y_hat = model.predict(x)
     print(x.shape, y_hat.shape)
     mu_hat = y_hat[:, 0]
@@ -99,7 +103,7 @@ def main(args):
     
     df2 = pd.DataFrame({"x": x_train, "y": y_train})
     print(df2)
-    sns.regplot(data=df2, x='x', y='y', ax=ax)
+    sns.regplot(data=df2, x='x', y='y', ax=ax, fit_reg=False)
     plt.show()
 
 if __name__ == '__main__':
@@ -107,6 +111,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()                                                                                
     parser.add_argument("--epochs", type=int, default=15)
     parser.add_argument("--batch_size", type=int, default=32)
+    parser.add_argument("-e", "--early_stopping_patience", type=int, default=None)
+    parser.add_argument("--hidden", type=int, default=5)
     parser.add_argument("--sigma", type=float, default=1.0)
     args = parser.parse_args()
 
