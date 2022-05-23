@@ -68,7 +68,7 @@ def main(args):
 if __name__ == '__main__':
     import argparse                                                                                                   
     parser = argparse.ArgumentParser()                                                                                
-    parser.add_argument("--n", type=float, default=400)
+    parser.add_argument("--n", type=int, default=400)
     parser.add_argument("--sigma", type=float, default=1.0)
     args = parser.parse_args()
 
