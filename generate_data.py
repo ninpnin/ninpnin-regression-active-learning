@@ -32,13 +32,12 @@ def leaky_sine(x, threshold=1.0, a=2.0, b=0.1, sines=2):
     if x_pos > threshold:
         x_remainder = x_pos - threshold
         y = x_remainder * b + threshold * a_prime
+        if x < 0:
+            y = -y
     else:
         x_pos = x + threshold
         x_pos = x_pos / (2.0 * threshold)
-        y = tf.math.cos(x_pos * sines * 2.0 * math.pi)
-
-    if x < 0:
-        y = -y
+        y = - tf.math.cos(x_pos * (sines+ 0.5) * 2.0 * math.pi) * a
 
     return y
 
