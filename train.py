@@ -104,8 +104,8 @@ def main(args):
     df2 = pd.DataFrame({"x": x_train, "y": y_train})
     print(df2)
     sns.regplot(data=df2, x='x', y='y', ax=ax, fit_reg=False)
-    plt.show()
     plt.savefig('model.png')
+    plt.show()
 
 if __name__ == '__main__':
     import argparse                                                                                                   
