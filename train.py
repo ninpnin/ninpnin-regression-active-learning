@@ -30,7 +30,7 @@ def custom_loss(y_true, y_pred):
     #print(loss)
     return - loss / no_of_examples
 
-def define_model():
+def define_model(args):
     model = Sequential(name="Model-with-One-Input")
     model.add(Input(shape=(1,), name='Input-Layer'))
     model.add(Dense(args.hidden, activation='relu', name='h1'))
@@ -46,7 +46,7 @@ def main(args):
     df = pd.read_csv("data.csv")
 
 
-    model = define_model()
+    model = define_model(args)
     print(model.summary())
 
     x, y = df["x"], df["y"]
